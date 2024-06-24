@@ -594,4 +594,4 @@ function handle_invalid_request()
     http_response_code(405); // Method Not Allowed
     echo json_encode(['success' => false, 'error' => 'Method Not Allowed']);
 }
-?>
+
