@@ -13,6 +13,9 @@ ensure_personal_activities_table_exists();
 ensure_exams_table_exists();
 ensure_zoom_records_table_exists();
 
+// Delete past exams
+delete_past_exams();
+
 // Set the appropriate headers to indicate JSON response and allow cross-origin requests
 set_json_headers();
 
@@ -152,6 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode(['success' => false, 'error' => 'Method Not Allowed']);
     handle_invalid_request();
 }
+
 function fetch_user_with_custom_fields($userId)
 {
     global $DB;
@@ -373,7 +377,6 @@ function fetch_course_tasks($userId, $courseId)
     return $tasks;
 }
 
-
 function fetch_course_events($userId, $courseId)
 {
     global $DB;
@@ -420,7 +423,6 @@ function get_assignment_file_url($courseModuleId)
     // Process files to find the first valid file URL
     return find_first_file_url($assignmentFiles);
 }
-
 
 function find_first_file_url($files)
 {
@@ -515,7 +517,6 @@ function fetch_course_schedule($courseid)
     return $result;
 }
 
-
 function fetch_course_exams($courseId)
 {
     global $DB;
@@ -572,6 +573,13 @@ function fetch_course_role_users($courseId, $roleId)
     return $DB->get_records_sql($sql, ['courseid' => $courseId, 'roleid' => $roleId]);
 }
 
+function delete_past_exams()
+{
+    global $DB;
+
+    $now = time();
+    $DB->delete_records_select('exams', 'exam_date < ?', [$now]);
+}
 
 function set_json_headers()
 {
@@ -586,3 +594,4 @@ function handle_invalid_request()
     http_response_code(405); // Method Not Allowed
     echo json_encode(['success' => false, 'error' => 'Method Not Allowed']);
 }
+?>

@@ -1,9 +1,8 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {Card, Row, Col, Container, Image} from 'react-bootstrap';
-import {Link} from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Card, Row, Col, Container, Image } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import './StudentCard.css';
-import {backspaceSVGDataUrl, expandContentSVGDataUrl} from './constants';
-
+import { backspaceSVGDataUrl, expandContentSVGDataUrl } from './constants';
 
 function adjustFontSizeForElements() {
     const elements = document.querySelectorAll('.lecturer-info p');
@@ -20,7 +19,7 @@ function adjustFontSizeForElements() {
     });
 }
 
-function CourseCard({course, isVisible}) {
+function CourseCard({ course, isVisible }) {
     const cardRef = useRef(null);
 
     useEffect(() => {
@@ -30,7 +29,6 @@ function CourseCard({course, isVisible}) {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-
 
     useEffect(() => {
         if (isVisible) {
@@ -42,22 +40,23 @@ function CourseCard({course, isVisible}) {
         const oneDay = 24 * 60 * 60 * 1000;
         return Math.round(Math.abs((date1 - date2) / oneDay));
     };
+
+    const getDaysUntilMoedA = () => {
+        const moedAExam = course.exams.find(exam => exam.exam_type === 'Moed A');
+        return moedAExam ? getDaysDifference(new Date(moedAExam.exam_date * 1000), new Date()) : 'N/A';
+    };
+
     return (
         <Col ref={cardRef} className="card-container show">
             <Card className="subject-card">
                 <Card.Header className="card-header d-flex justify-content-between align-items-center">
                     <Link to={`/details/${course.id}`}>
-                        <Image src={expandContentSVGDataUrl} alt="expand content" width="30"
-                               className="hover-effect-image"/>
+                        <Image src={expandContentSVGDataUrl} alt="expand content" width="30" className="hover-effect-image" />
                     </Link>
-                    <h3 style={{color: "black", fontWeight: "bolder"}}>{course.fullname}</h3>
+                    <h3 style={{ color: "black", fontWeight: "bolder" }}>{course.fullname}</h3>
 
                     <a href={course.url} target="_blank" rel="noopener noreferrer">
-                        <Image className="keyboard_backspace"
-                               src={backspaceSVGDataUrl}
-                               alt="course site"
-                               width={70}
-                               height={40}/>
+                        <Image className="keyboard_backspace" src={backspaceSVGDataUrl} alt="course site" width={70} height={40} />
                     </a>
                 </Card.Header>
                 <Card.Body>
@@ -67,19 +66,19 @@ function CourseCard({course, isVisible}) {
                             <span>משימות ממתינות</span>
                         </Col>
                         <Col className="d-flex justify-content-between card-column">
-                            <h2>{Math.floor(Math.random() * 7 + 1)}</h2>
+                            <h2>{course.zoomRecords.filter(record => record.status === 'unwatched').length}</h2>
                             <span>הקלטות טרם נצפו</span>
                         </Col>
                     </Row>
                     <Row>
                         <Col className="d-flex justify-content-between card-column">
-                            <h2>{course.events[0] ? getDaysDifference(new Date(course.events[course.events.length - 1].timestart), new Date()) : '0'}</h2>
+                            <h2>{getDaysUntilMoedA()}</h2>
                             <span>ימים למועד א</span>
                         </Col>
                         <Col className="d-flex justify-content-between card-column">
                             <div>
                                 <span>מרצה</span>
-                                <Image src="/local/studentdash/frontend/dashboard/build/contact_mail.png" alt=""/>
+                                <Image src="/local/studentdash/frontend/dashboard/build/contact_mail.png" alt="" />
                             </div>
                             <div className="lecturer-info">
                                 <p className="lecturer-name">{course.lecturer || 'ד"ר יועש חסידים'}</p>
@@ -95,14 +94,13 @@ function CourseCard({course, isVisible}) {
     );
 }
 
-function SubjectCard({studentInfo}) {
+function SubjectCard({ studentInfo }) {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [visibleCards, setVisibleCards] = useState(new Set());
     useEffect(() => {
         setCourses(studentInfo.courses);
     }, [studentInfo.courses]);
-
 
     useEffect(() => {
         adjustFontSizeForElements();
@@ -127,7 +125,7 @@ function SubjectCard({studentInfo}) {
                     observer.unobserve(entry.target);
                 }
             });
-        }, {threshold: 0.1});
+        }, { threshold: 0.1 });
 
         const cardElements = document.querySelectorAll('.card-container');
         cardElements.forEach(card => observer.observe(card));
@@ -138,15 +136,14 @@ function SubjectCard({studentInfo}) {
     }, [courses]);
 
     return (
-        <Container fluid style={{padding: '20px', maxWidth: '1200px'}}>
+        <Container fluid style={{ padding: '20px', maxWidth: '1200px' }}>
             <Row xs={1} md={2} className="g-4">
                 {courses.map((course, idx) => (
-                    <CourseCard key={idx} course={course}/>
+                    <CourseCard key={idx} course={course} isVisible={visibleCards.has(course.id)} />
                 ))}
             </Row>
         </Container>
     );
 }
-
 
 export default SubjectCard;
