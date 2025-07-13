@@ -1,44 +1,47 @@
-# Student-Dash #
+# StudentDash: A Centralized Moodle Dashboard for Students
 
-TODO Describe the plugin shortly here.
+StudentDash is a Moodle plugin that enhances the student learning experience by aggregating all essential academic information into a single, modern, and intuitive dashboard. Built with a React frontend and a PHP backend, it provides students with a comprehensive overview of their courses, assignments, grades, and personal tasks.
 
-TODO Provide more detailed description here.
+![StudentDash Screenshot](frontend/dashboard/public/studentDash.png) 
 
-## Installing via uploaded ZIP file ##
 
-1. Log in to your Moodle site as an admin and go to _Site administration >
-   Plugins > Install plugins_.
-2. Upload the ZIP file with the plugin code. You should only be prompted to add
-   extra details if your plugin type is not automatically detected.
-3. Check the plugin validation report and finish the installation.
+## 🚀 The Problem
+In a standard Moodle environment, students often have to navigate through multiple pages and menus to find critical information like assignment deadlines, grades for different courses, and learning materials. This fragmented experience can be inefficient and frustrating.
 
-## Installing manually ##
+## ✨ The Solution
+StudentDash solves this by providing a single, centralized hub where students can see everything at a glance:
+*   **Unified Dashboard:** View data from all your courses in one place.
+*   **Course & Grade Tracking:** Easily access your enrolled courses and current grades.
+*   **Assignment Overview:** Keep track of upcoming and past-due assignments.
+*   **Personal Task Management:** Add and manage your own to-do items right within the dashboard.
+*   **Modern Interface:** A clean, responsive user interface built with React.
 
-The plugin can be also installed by putting the contents of this directory to
+## 🛠️ Tech Stack
+*   **Backend:** PHP, Moodle API
+*   **Frontend:** React, JavaScript, CSS
+*   **Database:** Moodle's default database (MariaDB/PostgreSQL/MySQL)
 
-    {your/moodle/dirroot}/local/studentdash
+## ⚙️ Getting Started
 
-Afterwards, log in to your Moodle site as an admin and go to _Site administration >
-Notifications_ to complete the installation.
+### Prerequisites
+*   A working Moodle instance.
+*   Administrator access to your Moodle site.
 
-Alternatively, you can run
+### Installation
+1.  **Download:** Download the latest release as a ZIP file from the [releases page](https://github.com/your-username/StudentDash/releases) *(Suggestion: Create a GitHub release for your project)*.
+2.  **Install Plugin:**
+    *   Log in to your Moodle site as an admin.
+    *   Navigate to `Site administration > Plugins > Install plugins`.
+    *   Upload the ZIP file. Moodle will automatically detect the plugin type.
+    *   Follow the on-screen instructions to complete the installation.
+3.  **Manual Installation:**
+    *   Alternatively, you can unzip the plugin and place the `studentdash` directory in `{your/moodle/dirroot}/local/`.
+    *   Log in as an admin and go to `Site administration > Notifications` to run the database upgrade.
 
-    $ php admin/cli/upgrade.php
-
-to complete the installation from the command line.
-
-## License ##
-
-2024 Or Bar Califa <you@example.com>
-
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later
-version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with
-this program.  If not, see <https://www.gnu.org/licenses/>.
+### Frontend Setup (for development)
+The React frontend is located in the `frontend/dashboard` directory. To run it in development mode:
+```bash
+cd frontend/dashboard
+npm install
+npm start
+```
